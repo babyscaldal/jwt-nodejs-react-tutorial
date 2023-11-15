@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -23,29 +23,28 @@ const convertToHashPassword = (userPassword) => {
   return hashPassword;
 };
 
-const createNewUser = (email, userPassword, username) => {
+const createNewUser = async (email, userPassword, username) => {
   let hashPassword = convertToHashPassword(userPassword);
 
-  connection.query(
-    `INSERT INTO Users  (email, password , username) 
-        VALUES (?, ?, ?)`,
-    [email, hashPassword, username],
-    (err, results, fields) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(results);
-    },
-  );
+  try {
+    const [results, fields] = await connection.query(
+      `INSERT INTO Users  (email, password , username) 
+          VALUES (?, ?, ?)`,
+      [email, hashPassword, username],
+    );
+  } catch (error) {
+    console.log('check error:', error);
+  }
 };
 
-const getUsersList = () => {
-  connection.query(`SELECT * FROM Users`, (err, results, fields) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log('check results', results);
-  });
+const getUsersList = async () => {
+  try {
+    const [results, fields] = await connection.query(`SELECT * FROM Users`);
+    console.log('check result:', results);
+    return results;
+  } catch (error) {
+    console.log('check error:', error);
+  }
 };
 
 const userServices = { getUsersList, createNewUser, convertToHashPassword };
