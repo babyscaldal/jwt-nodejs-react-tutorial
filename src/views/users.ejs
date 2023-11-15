@@ -10,7 +10,7 @@
       crossorigin="anonymous"
     />
 
-    <title>Document</title>
+    <title>List users</title>
   </head>
   <body>
     <!-- <%=JSON.stringify(users)%> -->
@@ -77,8 +77,12 @@
               <td><%= user.email%></td>
               <td><%= user.username%></td>
               <td>
-                <button class="btn btn-warning">Edit</button>
-                <button class="btn btn-danger">Delete</button>
+                <a class="btn btn-warning" href="/update-user/<%= user.id %>">
+                  Edit
+                </a>
+                <a class="btn btn-danger" href="/delete-user/<%= user.id %>">
+                  Delete
+                </a>
               </td>
             </tr>
             <%}) %>

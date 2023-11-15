@@ -47,6 +47,55 @@ const getUsersList = async () => {
   }
 };
 
-const userServices = { getUsersList, createNewUser, convertToHashPassword };
+const deleteUser = async (userId) => {
+  try {
+    const [results, fields] = await connection.query(
+      `DELETE FROM Users WHERE id = ?`,
+      [userId],
+    );
+    console.log('check result:', results);
+    return results;
+  } catch (error) {
+    console.log('check error:', error);
+  }
+};
+
+const updateUserInfo = async (email, username, userId) => {
+  try {
+    const [results, fields] = await connection.query(
+      `
+      UPDATE Users
+      SET email = ?, username = ?
+      WHERE id = ?`,
+      [email, username, userId],
+    );
+    console.log('check result:', results);
+    return results;
+  } catch (error) {
+    console.log('check error:', error);
+  }
+};
+
+const getUserById = async (userId) => {
+  try {
+    const [results, fields] = await connection.query(
+      `SELECT * FROM Users WHERE id = ?`,
+      [userId],
+    );
+    console.log('check result:', results);
+    return results;
+  } catch (error) {
+    console.log('check error:', error);
+  }
+};
+
+const userServices = {
+  getUserById,
+  deleteUser,
+  getUsersList,
+  createNewUser,
+  convertToHashPassword,
+  updateUserInfo,
+};
 
 export default userServices;
